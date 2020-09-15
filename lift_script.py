@@ -33,13 +33,13 @@ writer_output = csv.writer(open('Lift_Values.csv', 'w'),delimiter=str(','), quot
 dictionary1 = {}
 d2_dict = defaultdict(dict)
 
-with open('edmunds_pair_keys.txt') as fileText:
+with open('attributes_pair_keys.txt') as fileText:
     for row_pairkey in fileText:
         row_pairkey = row_pairkey.replace(",", " ")
 
 
 #Use this when getting unicode error
-with io.open('edmunds_new_output.csv', 'r', encoding='utf-8', errors='ignore') as infile, open('edmunds_new_output_m.csv', 'w') as outfile:
+with io.open('edmunds.csv', 'r', encoding='utf-8', errors='ignore') as infile, open('edmunds_new_output_m.csv', 'w') as outfile:
      inputs = csv.reader(infile)
      output = csv.writer(outfile)
      for index, row in enumerate(inputs):
@@ -71,7 +71,7 @@ for post in posts_all:
     posts_clean.append(s)
 
 print("WARNING::EVERYTHING NEEDS TO BE IN LOWER CASE edmunds_pair_keys.txt file")
-with open('edmunds_pair_keys.txt') as fileText:
+with open('attributes_pair_keys.txt') as fileText:
     for row in fileText:
         keys_all = row.split(",")
     #print keys_all
