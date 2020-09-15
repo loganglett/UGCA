@@ -1,6 +1,16 @@
 #!/usr/bin/python2.7
 import csv
-from nltk.corpus import stopwords
+import nltk
+import ssl
+try:
+    _create_unverified_https_context = ssl._create_unverified_context
+except AttributeError:
+    pass
+else:
+    ssl._create_default_https_context = _create_unverified_https_context
+
+nltk.download('stopwords')
+#from nltk.corpus import stopwords
 import re
 import string
 import decimal
@@ -39,17 +49,17 @@ with io.open('edmunds_new_output.csv', 'r', encoding='utf-8', errors='ignore') a
 
 with open('edmunds_new_output_m.csv') as f:
     rows = csv.reader(f,  delimiter=str(','), quotechar=str('"'))
-	#file_length = '[%s]' % len(f.readlines())
+    #file_length = '[%s]' % len(f.readlines())
 	#print "Hello"
     for row in rows:
         inter1.append(row[2])
-	file_length = file_length + 1
+    file_length = file_length + 1
 
 file_length = file_length + 1
 inter1.append(row_pairkey)
 
 for row in inter1:
-    #sentences = re.split(r' *[\.\?!][\'"\)\]]* *', row)
+#sentences = re.split(r' *[\.\?!][\'"\)\]]* *', row)
     out1 = re.sub('[%s]' % re.escape(string.punctuation), '', row.lower())
     posts_all.append(out1)
 
@@ -60,7 +70,7 @@ for post in posts_all:
             s.append(i)
     posts_clean.append(s)
 
-print "WARNING::EVERYTHING NEEDS TO BE IN LOWER CASE edmunds_pair_keys.txt file"
+print("WARNING::EVERYTHING NEEDS TO BE IN LOWER CASE edmunds_pair_keys.txt file")
 with open('edmunds_pair_keys.txt') as fileText:
     for row in fileText:
         keys_all = row.split(",")
@@ -81,7 +91,7 @@ with open('edmunds_pair_keys.txt') as fileText:
                     #nb2 = row["car_maker2"]
             nb = keys_all[index]
             nb2 = keys_all[subs_counter]
-            print '-------------------' + nb + ' and ' + nb2 + '-------------------'
+            print('-------------------' + nb + ' and ' + nb2 + '-------------------')
             subs_counter = subs_counter + 1
 
             nb_plu = nb + 's'
@@ -136,26 +146,26 @@ with open('edmunds_pair_keys.txt') as fileText:
 
 
             if(dictionary1.has_key(nb)):
-                print nb + " " + str(dictionary1[nb])
+                print(nb + " " + str(dictionary1[nb]))
             else:
-                print "This word is not present"
+                print("This word is not present")
                 exit(0)
 
             if(dictionary1.has_key(nb2)):
-                print nb2 + " " + str(dictionary1[nb2])
+                print(nb2 + " " + str(dictionary1[nb2]))
             else:
-                print "This word is not present"
+                print("This word is not present")
                 exit(0)
 
             if(d2_dict.has_key(nb)):
                 if(d2_dict[nb].has_key(nb2)):
-                    print nb +" " +nb2 +" " + str(d2_dict[nb][nb2])
+                    print(nb +" " +nb2 +" " + str(d2_dict[nb][nb2]))
                     #print 'Rows in file: ', file_length
                     #if(d2_dict[nb].has_key(nb2)):
                     #results_dict['Pair'] = nb + "_" +nb2
                     #results_dict['Lift Value'] = decimal.Decimal(decimal.Decimal(file_length*(d2_dict[nb][nb2]))/decimal.Decimal((dictionary1[nb]*dictionary1[nb2])))
                     results_dict.update({nb + "_" +nb2:decimal.Decimal(decimal.Decimal(file_length*(d2_dict[nb][nb2]))/decimal.Decimal((dictionary1[nb]*dictionary1[nb2])))})
-                    print 'lift('+ nb + "," +nb2 + ')',decimal.Decimal(decimal.Decimal(file_length*(d2_dict[nb][nb2]))/decimal.Decimal((dictionary1[nb]*dictionary1[nb2])))
+                    print('lift('+ nb + "," +nb2 + ')',decimal.Decimal(decimal.Decimal(file_length*(d2_dict[nb][nb2]))/decimal.Decimal((dictionary1[nb]*dictionary1[nb2]))))
                     val = decimal.Decimal(decimal.Decimal(file_length*(d2_dict[nb][nb2]))/decimal.Decimal((dictionary1[nb]*dictionary1[nb2])))
                     df1.loc[itr] = [nb, nb2, val]  # adding a row
                     itr = itr + 1
@@ -163,12 +173,12 @@ with open('edmunds_pair_keys.txt') as fileText:
                     for key, value in results_dict.items():
                         writer_output.writerow([nb + "_" +nb2, decimal.Decimal(decimal.Decimal(file_length*(d2_dict[nb][nb2]))/decimal.Decimal(dictionary1[nb]*dictionary1[nb2]))])
                 else:
-                    print "These words are not present together in a post"
+                    print("These words are not present together in a post")
                     exit(0)
             else:
-                print "These words are not present together in a post"
+                print("These words are not present together in a post")
                 exit(0)
-print '--------------------------------------------------------'
+print('--------------------------------------------------------')
 df1.to_csv('Lift_Values.csv')
 
 df1 = pd.read_csv("Lift_Values.csv")
@@ -179,7 +189,7 @@ frames = [df1, df2]
 result = pd.concat(frames)
 
 table = pd.pivot_table(result, values='value', index='nb',columns='nb2', fill_value=0.00)
-print table
+print(table)
 print ("---------------")
 
 for i in range(table.shape[0]):
@@ -188,9 +198,9 @@ for i in range(table.shape[0]):
             table.iloc[i,j] = " "
 
 table.index.names = ['']
-print table
+print(table)
 table.to_csv('Lift_Matrix.csv')
 
-print 'Consolidated lift values amd matrix  can be found in Lift_Values.csv file and Lift_Matrix.csv'
+print('Consolidated lift values amd matrix  can be found in Lift_Values.csv file and Lift_Matrix.csv')
 
 
