@@ -5,10 +5,10 @@ import csv
 import re
 
 # replace this csv file with the filename you want to store the modified data in
-filename1 = 'sample_replacement_data_modified.csv'
+filename1 = 'edmunds_20000_replaced.csv'
 
 # replace this csv with the filename which you want to read and replace the words in it
-filename = 'sample_replacement_data.csv'
+filename = 'edmunds_20000rows.csv'
 tempfile = NamedTemporaryFile(delete=False)
 
 with open(filename, 'rb') as csvFile, tempfile:
@@ -20,7 +20,7 @@ with open(filename, 'rb') as csvFile, tempfile:
         #this item is the forum post
         item = row[2]
         #replace this csv file with the file where you have stored words, modified words
-        with open('sample_models.csv', 'rb') as csvfile:
+        with open('models_and_brands.csv', 'rb') as csvfile:
             read = csv.reader(csvfile, delimiter=str(','), quotechar=str('|'))
             for row2 in read:
                 row[2] = re.sub(r"\b%s\b" % row2[0].lower(),row2[1].lower(), row[2].lower() )
