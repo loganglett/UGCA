@@ -11,7 +11,7 @@ from sklearn import manifold
 from matplotlib.font_manager import FontProperties
 
 
-new_reader1 = pd.read_excel("Sample_dissimilarity_matrix.xlsx")
+new_reader1 = pd.read_excel("aspiration_dissimilarity_matrix.xlsx")
 result1 = new_reader1.values
 result = result1[:,1:]
 size = result.shape

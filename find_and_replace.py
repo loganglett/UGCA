@@ -5,10 +5,10 @@ import csv
 import re
 
 # replace this csv file with the filename you want to store the modified data in
-filename1 = 'edmunds_20000_replaced.csv'
+filename1 = 'short_aspirational_dataset.csv'
 
 # replace this csv with the filename which you want to read and replace the words in it
-filename = 'edmunds_20000rows.csv'
+filename = 'edmunds.csv'
 tempfile = NamedTemporaryFile(delete=False)
 
 with open(filename, 'rb') as csvFile, tempfile:
